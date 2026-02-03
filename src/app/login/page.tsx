@@ -3,8 +3,9 @@
 import axios from 'axios'
 import { ArrowLeft, EyeIcon, EyeOff, Mail, ShoppingCart, Lock, Loader2 } from 'lucide-react'
 import { motion } from "motion/react"
-import React, { useState } from 'react'
+import React, { FormEvent, useState } from 'react'
 import { useRouter } from "next/navigation"
+import { signIn, useSession } from 'next-auth/react'
 
  
 
@@ -25,22 +26,25 @@ const Login = ({ previosStep }: propType) => {
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   const passwordFilled = password.length > 0
 
+  const session = useSession()
+  console.log(session)
+
   const handleBlur = (field: string) => {
     setFocused(null)
     setTouched(prev => ({ ...prev, [field]: true }))
   }
 
-  const handleLogin = async () => {
-    setError("")
-    setLoading(true)
-    try {
-      const result = await axios.post("/api/auth/login", { email, password })
-      console.log(result.data)
-    } catch (err: any) {
-      setError(err?.response?.data?.message || "Invalid email or password")
-    } finally {
+  const handleLogin = async (e:FormEvent) => {
+     e.preventDefault()
+     setLoading(true)
+     try {
+      await signIn("credentials", {
+        email,password
+      })
       setLoading(false)
-    }
+     } catch (error) {
+      console.log(error  )
+     }
   }
 
   const canSubmit = emailValid && passwordFilled
