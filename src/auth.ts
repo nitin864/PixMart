@@ -18,6 +18,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!credentials?.email || !credentials?.password) {
           return null
         }
+      
         
         const email = credentials.email as string
         const password = credentials.password as string
