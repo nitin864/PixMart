@@ -16,7 +16,7 @@ async function Home() {
     redirect("/login")
   }
 
-  const InComplete = !user.mobile || !user.role || (!user.mobile && user.role == "user")
+ const InComplete = !user.mobile || !user.role
      if(InComplete){
        return <EditRoleMobile/>
      }
