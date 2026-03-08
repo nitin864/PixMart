@@ -1,7 +1,6 @@
 # PixMart 🛒  (CURRETLY UNDER DEVELOPNMENT)
 
-A grocery delivery app — currently in development.
-
+A full-stack grocery delivery app built with Next.js 15, Auth.js v5, MongoDB & Tailwind CSS. Features role-based access for Admins, Users & Delivery Boys with mobile onboarding.
 ## Tech Stack
 
 - Next.js 15 (App Router)
