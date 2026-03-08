@@ -7,38 +7,39 @@ export async function POST(req: NextRequest) {
 
     try {
         await connectDb()
-        const {name, email, password} = await req.json()
-        const existUser = await User.findOne({email})
-        if(existUser){
+        const { name, email, password } = await req.json()
+        const existUser = await User.findOne({ email })
+        if (existUser) {
             return NextResponse.json(
-                {message: "Email Already Exist!"},
-                {status: 400 }
+                { message: "Email Already Exist!" },
+                { status: 400 }
             )
         }
 
-        if(password.length<6){
+
+        if (password.length < 6) {
             return NextResponse.json(
-                {message: "Password must be atleast 6 characters "},
-                {status: 400 }
+                { message: "Password must be atleast 6 characters " },
+                { status: 400 }
             )
         }
 
-        const hashedPassword =  await bcrypt.hash(password,10 ) 
+        const hashedPassword = await bcrypt.hash(password, 10)
 
-        const user =  await User.create ({
+        const user = await User.create({
             name,
             email,
-            password:hashedPassword 
+            password: hashedPassword
         })
         return NextResponse.json(
-                user,
-                {status: 200 }
-            )
+            user,
+            { status: 200 }
+        )
     } catch (error) {
         return NextResponse.json(
-                {message: `register error${error}`},
-                {status: 500 }
-            )
+            { message: `register error${error}` },
+            { status: 500 }
+        )
     }
-    
+
 }
