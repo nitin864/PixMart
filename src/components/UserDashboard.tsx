@@ -4,7 +4,9 @@ import HeroSection from './HeroSection'
 function UserDashboard() {
   return (
     <>
-      <HeroSection/>
+     
+        <HeroSection/>
+       
     </>
   )
 }
