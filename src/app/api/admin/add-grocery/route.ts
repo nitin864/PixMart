@@ -13,7 +13,7 @@ export async function POST (req:NextRequest){
                 {message: "You are not an admin"},
                 {status: 400}
             )
-        }
+        } 
 
         const formData = await req.formData()
         const name = formData.get("name") as string
