@@ -24,6 +24,7 @@ type NavLink = {
 type NavClientProps = {
   userName: string | null
   userImage: string | null
+  userRole: string | null
 }
 
 const links: NavLink[] = [
@@ -32,7 +33,12 @@ const links: NavLink[] = [
   { label: 'Deliver' }
 ]
 
-export default function NavClient({ userName, userImage }: NavClientProps) {
+export default function NavClient({
+  userName,
+  userImage,
+  userRole
+}: NavClientProps) {
+
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -54,12 +60,23 @@ export default function NavClient({ userName, userImage }: NavClientProps) {
     if (searchOpen) searchRef.current?.focus()
   }, [searchOpen])
 
+  /* Close on ESC */
+  useEffect(() => {
+    const esc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSearchOpen(false)
+    }
+
+    window.addEventListener('keydown', esc)
+    return () => window.removeEventListener('keydown', esc)
+  }, [])
+
   /* Click outside close */
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (!navRef.current?.contains(e.target as Node)) {
         setOpenDropdown(null)
         setProfileOpen(false)
+        setSearchOpen(false)
       }
     }
 
@@ -73,7 +90,7 @@ export default function NavClient({ userName, userImage }: NavClientProps) {
         ref={navRef}
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.5 }}
         className="fixed top-0 left-0 right-0 z-50 transition-all"
         style={{
           background: scrolled ? 'rgba(5,20,10,0.9)' : 'transparent',
@@ -149,26 +166,33 @@ export default function NavClient({ userName, userImage }: NavClientProps) {
           {/* Right side */}
           <div className="flex items-center gap-2">
 
-            {/* Search */}
-            <AnimatePresence>
-              {searchOpen && (
-                <motion.input
-                  ref={searchRef}
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: 160, opacity: 1 }}
-                  exit={{ width: 0, opacity: 0 }}
-                  placeholder="Search..."
-                  className="px-3 py-2 text-sm rounded-lg bg-zinc-800 text-white outline-none"
-                />
-              )}
-            </AnimatePresence>
+            {/* Search (only for user role) */}
+            {userRole === "user" && (
+              <div className="relative flex items-center">
 
-            <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="p-2 text-zinc-400 hover:text-white"
-            >
-              <Search size={18} />
-            </button>
+                <AnimatePresence>
+                  {searchOpen && (
+                    <motion.input
+                      ref={searchRef}
+                      initial={{ width: 0, opacity: 0 }}
+                      animate={{ width: 180, opacity: 1 }}
+                      exit={{ width: 0, opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      placeholder="Search products..."
+                      className="px-3 py-2 text-sm rounded-lg bg-zinc-800 text-white outline-none mr-2"
+                    />
+                  )}
+                </AnimatePresence>
+
+                <button
+                  onClick={() => setSearchOpen(!searchOpen)}
+                  className="p-2 text-zinc-400 hover:text-white"
+                >
+                  <Search size={18} />
+                </button>
+
+              </div>
+            )}
 
             {/* Cart */}
             <button className="relative p-2 text-zinc-400 hover:text-white">
@@ -196,7 +220,6 @@ export default function NavClient({ userName, userImage }: NavClientProps) {
                     alt="avatar"
                     width={26}
                     height={26}
-                    sizes="26px"
                     className="rounded-md"
                   />
                 ) : (
