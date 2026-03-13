@@ -16,9 +16,22 @@ export async function proxy(req: NextRequest) {
         loginUrl.searchParams.set("callback", req.url)
         return NextResponse.redirect(loginUrl)
     }
+
+    const role = token?.role
+    if (pathname.startsWith("/user") && role !== "user") {
+        return NextResponse.redirect(new URL("/unautorized", req.url))
+    }
+    if (pathname.startsWith("/delivery") && role !== "deliveryBoy") {
+        return NextResponse.redirect(new URL("/unautorized", req.url))
+    }
+    if (pathname.startsWith("/admin") && role !== "admin") {
+        return NextResponse.redirect(new URL("/unautorized", req.url))
+    }
     return NextResponse.next()
 
-} 
-export const config = { 
-  matcher: '/((?!api|_next/static|_next/image|favicon.ico|.*\\.).*)',
+
+
+}
+export const config = {
+    matcher: '/((?!api|_next/static|_next/image|favicon.ico|.*\\.).*)',
 }
