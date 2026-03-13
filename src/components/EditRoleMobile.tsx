@@ -56,9 +56,9 @@ function EditRoleMobile() {
                 role: selected,
                 phone,
             })
-            await update() 
+            await update({role:selected  }) 
             setConfirmed(true)
-            window.location.href = "/"
+            window.location.href = "/" 
         } catch (err: unknown) {
             if (axios.isAxiosError(err)) {
                 setError(err.response?.data?.message ?? "Something went wrong. Please try again.")
