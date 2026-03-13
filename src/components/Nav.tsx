@@ -5,13 +5,18 @@ import NavClient from './NavClient'
 
 async function Nav() {
   await connectDb()
+
   const session = await auth()
-  const user = await User.findById(session?.user?.id)
+
+  const user = session?.user?.id
+    ? await User.findById(session.user.id)
+    : null
 
   return (
     <NavClient
-      userName={user?.name ?? null}
-      userImage={user?.image ?? null}
+      userName={user?.name ?? session?.user?.name ?? null}
+      userImage={user?.image ?? session?.user?.image ?? null}
+      userRole={session?.user?.role ?? null}
     />
   )
 }
