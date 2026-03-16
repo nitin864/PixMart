@@ -1,12 +1,15 @@
 import React from 'react'
 import HeroSection from './HeroSection'
+import CategorySlider from './CategorySlider'
 
 function UserDashboard() {
   return (
     <>
-     
-        <HeroSection/>
-       
+
+      <HeroSection />
+      <div className='mt-2.5'><CategorySlider />
+      </div>
+
     </>
   )
 }
