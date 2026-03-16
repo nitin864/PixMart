@@ -1,9 +1,9 @@
 import { v2 as cloudinary } from 'cloudinary';
 
-cloudinary.config({ 
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
-  api_key: process.env.CLOUDINARY_API_KEY, 
-  api_secret: process.env.CLOUDINARY_SECRET_KEY
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key:    process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET_KEY,  
 });
 
 const uploadFileOnCloudinary = async (file: Blob): Promise<string | null> => {
@@ -15,21 +15,21 @@ const uploadFileOnCloudinary = async (file: Blob): Promise<string | null> => {
 
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
-        { resource_type: "auto" },  
+        { resource_type: "auto", folder: "groceries" },
         (error, result) => {
           if (error) {
+            console.error("Cloudinary stream error:", error);
             reject(error);
           } else {
-            resolve(result?.secure_url ?? null);  
+            resolve(result?.secure_url ?? null);
           }
         }
       );
-
-      uploadStream.end(buffer);   
+      uploadStream.end(buffer);
     });
 
   } catch (error) {
-    console.error("Cloudinary upload failed:", error);   
+    console.error("Cloudinary upload failed:", error);
     return null;
   }
 };
