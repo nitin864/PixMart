@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { motion } from "framer-motion";
 
 const categories = [
   {
@@ -83,6 +86,36 @@ const categories = [
   },
 ];
 
+/* ── Animation variants ── */
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.07,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 24, scale: 0.92 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { type: "spring" as const, stiffness: 260, damping: 20 },
+  },
+};
+
+const headingVariants = {
+  hidden: { opacity: 0, x: -16 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.4, ease: "easeOut" as const },
+  },
+};
+
 function CategorySlider() {
   return (
     <div
@@ -90,47 +123,57 @@ function CategorySlider() {
       style={{ fontFamily: "'DM Sans', 'Segoe UI', sans-serif" }}
     >
       {/* Heading */}
-      <p className="text-sm font-semibold text-zinc-400 uppercase tracking-widest px-4 mb-4">
+      <motion.p
+        variants={headingVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.5 }}
+        className="text-sm font-semibold text-zinc-400 uppercase tracking-widest px-4 mb-4"
+      >
         Shop by Categories
-      </p>
+      </motion.p>
 
       {/* Scrollable row */}
-      <div
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
         className="flex gap-3 px-4 overflow-x-auto"
-        style={{
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
-        }}
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {categories.map((cat, index) => (
-          <button
+          <motion.button
             key={index}
+            variants={cardVariants}
+            whileHover={{
+              scale: 1.08,
+              y: -4,
+              transition: { type: "spring", stiffness: 400, damping: 15 },
+            }}
+            whileTap={{ scale: 0.93 }}
             className={`
               group
-              flex-shrink-0
+            shrink-0
               flex flex-col items-center justify-center gap-2
               min-w-[120px] w-[120px]
               rounded-2xl
               border ${cat.border}
-              bg-gradient-to-br ${cat.color}
+              bg-linear-to-br ${cat.color}
               backdrop-blur-md
               px-3 py-4
               cursor-pointer
-              transition-all duration-300
-              hover:scale-105
               hover:shadow-lg ${cat.glow}
               hover:brightness-125
-              active:scale-95
             `}
           >
-            {/* Icon bubble */}
-            <span
-              className="text-2xl leading-none select-none
-              transition-transform duration-300
-              group-hover:-translate-y-0.5"
+            {/* Icon — bounces up on card hover */}
+            <motion.span
+              className="text-2xl leading-none select-none"
+              whileHover={{ y: -3, rotate: [0, -8, 8, 0], transition: { duration: 0.4 } }}
             >
               {cat.icon}
-            </span>
+            </motion.span>
 
             {/* Label */}
             <p
@@ -138,9 +181,9 @@ function CategorySlider() {
             >
               {cat.name}
             </p>
-          </button>
+          </motion.button>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }
