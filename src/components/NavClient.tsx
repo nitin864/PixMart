@@ -183,7 +183,7 @@ export default function NavClient({
               </button>
             )}
 
-            {/* ✅ ADMIN links — Desktop (was missing classNames before) */}
+            
             {userRole === "admin" && (
               <div className="hidden md:flex items-center gap-3">
                 <Link href="/admin/add-grocery" className={adminLinkClass}>
