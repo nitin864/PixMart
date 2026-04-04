@@ -10,7 +10,8 @@ import {
   Leaf,
   ChevronDown,
   User,
-  LogOut
+  LogOut,
+  ShoppingBag
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -114,54 +115,56 @@ export default function NavClient({
           </Link>
 
           {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-1">
-            {links.map((link) => (
-              <div key={link.label} className="relative">
+          {userRole === "user" && (
+            <div className="hidden md:flex items-center gap-1">
+              {links.map((link) => (
+                <div key={link.label} className="relative">
 
-                <button
-                  onClick={() =>
-                    setOpenDropdown(
-                      openDropdown === link.label ? null : link.label
-                    )
-                  }
-                  className="flex items-center gap-1 px-4 py-2 text-sm text-zinc-300 hover:text-white"
-                >
-                  {link.label}
+                  <button
+                    onClick={() =>
+                      setOpenDropdown(
+                        openDropdown === link.label ? null : link.label
+                      )
+                    }
+                    className="flex items-center gap-1 px-4 py-2 text-sm text-zinc-300 hover:text-white"
+                  >
+                    {link.label}
 
-                  {link.sub && (
-                    <ChevronDown
-                      size={14}
-                      className={`transition ${
-                        openDropdown === link.label ? 'rotate-180' : ''
-                      }`}
-                    />
-                  )}
-                </button>
+                    {link.sub && (
+                      <ChevronDown
+                        size={14}
+                        className={`transition ${openDropdown === link.label ? 'rotate-180' : ''
+                          }`}
+                      />
+                    )}
+                  </button>
 
-                <AnimatePresence>
-                  {link.sub && openDropdown === link.label && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 8 }}
-                      className="absolute top-full left-0 mt-2 w-44 rounded-xl bg-zinc-900 border border-zinc-700 shadow-xl"
-                    >
-                      {link.sub.map((item) => (
-                        <Link
-                          key={item}
-                          href="#"
-                          className="block px-4 py-2 text-sm text-zinc-400 hover:text-white hover:bg-zinc-800"
-                        >
-                          {item}
-                        </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                  <AnimatePresence>
+                    {link.sub && openDropdown === link.label && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        className="absolute top-full left-0 mt-2 w-44 rounded-xl bg-zinc-900 border border-zinc-700 shadow-xl"
+                      >
+                        {link.sub.map((item) => (
+                          <Link
+                            key={item}
+                            href="#"
+                            className="block px-4 py-2 text-sm text-zinc-400 hover:text-white hover:bg-zinc-800"
+                          >
+                            {item}
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
-              </div>
-            ))}
-          </div>
+                </div>
+              ))}
+            </div>
+          )}
+
 
           {/* Right side */}
           <div className="flex items-center gap-2">
@@ -195,7 +198,8 @@ export default function NavClient({
             )}
 
             {/* Cart */}
-            <button className="relative p-2 text-zinc-400 hover:text-white">
+            {userRole === "user" && (<>
+              <button className="relative p-2 text-zinc-400 hover:text-white">
               <ShoppingCart size={18} />
 
               <motion.span
@@ -206,6 +210,8 @@ export default function NavClient({
                 3
               </motion.span>
             </button>
+            </>)}
+            
 
             {/* Desktop profile */}
             <div className="relative hidden md:block">
@@ -238,12 +244,20 @@ export default function NavClient({
                     className="absolute right-0 mt-2 w-40 bg-zinc-900 border border-zinc-700 rounded-xl shadow-lg"
                   >
                     <button
+                      onClick={() => null}
+                      className='flex items-center gap-2 w-fu;; px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800'
+                    >
+                      <ShoppingBag size={16} />
+                      My Orders
+                    </button>
+                    <button
                       onClick={() => signOut()}
                       className="flex items-center gap-2 w-full px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800"
                     >
                       <LogOut size={16} />
                       Logout
                     </button>
+
                   </motion.div>
                 )}
               </AnimatePresence>
