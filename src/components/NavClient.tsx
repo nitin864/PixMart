@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useViewportScroll } from 'framer-motion'
 import {
   ShoppingCart,
   Search,
@@ -200,18 +200,39 @@ export default function NavClient({
             {/* Cart */}
             {userRole === "user" && (<>
               <button className="relative p-2 text-zinc-400 hover:text-white">
-              <ShoppingCart size={18} />
+                <ShoppingCart size={18} />
 
-              <motion.span
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                className="absolute -top-1 -right-1 w-4 h-4 text-[10px] flex items-center justify-center rounded-full bg-green-600 text-white"
-              >
-                3
-              </motion.span>
-            </button>
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -top-1 -right-1 w-4 h-4 text-[10px] flex items-center justify-center rounded-full bg-green-600 text-white"
+                >
+                  3
+                </motion.span>
+              </button>
             </>)}
-            
+
+            {userRole === "admin" && (
+              <>
+                <div className="hidden md:flex items-center gap-4">
+                  <Link href="/admin/add-grocery"
+                    className="flex items-center gap-2 px-4 py-2 rounded-md border border-green-500/20 bg-green-500/10 text-gray-300 font-medium text-sm shadow-md shadow-green-500/10 hover:border-green-500/60 hover:bg-green-500/20 hover:text-green-400 hover:shadow-lg hover:shadow-green-500/40 hover:scale-105 transition-all duration-300">
+                    ➕ Add Grocery
+                  </Link>
+
+                  <Link href="/admin/groceries"
+                    className="flex items-center gap-2 px-4 py-2 rounded-md border border-green-500/20 bg-green-500/10 text-gray-300 font-medium text-sm shadow-md shadow-green-500/10 hover:border-green-500/60 hover:bg-green-500/20 hover:text-green-400 hover:shadow-lg hover:shadow-green-500/40 hover:scale-105 transition-all duration-300">
+                    🥦 View Grocery
+                  </Link>
+
+                  <Link href="/admin/orders"
+                    className="flex items-center gap-2 px-4 py-2 rounded-md border border-green-500/20 bg-green-500/10 text-gray-300 font-medium text-sm shadow-md shadow-green-500/10 hover:border-green-500/60 hover:bg-green-500/20 hover:text-green-400 hover:shadow-lg hover:shadow-green-500/40 hover:scale-105 transition-all duration-300">
+                    📦 Manage Orders
+                  </Link>
+                </div>
+              </>
+            )}
+
 
             {/* Desktop profile */}
             <div className="relative hidden md:block">
@@ -243,13 +264,18 @@ export default function NavClient({
                     exit={{ opacity: 0, y: 6 }}
                     className="absolute right-0 mt-2 w-40 bg-zinc-900 border border-zinc-700 rounded-xl shadow-lg"
                   >
-                    <button
-                      onClick={() => null}
-                      className='flex items-center gap-2 w-fu;; px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800'
-                    >
-                      <ShoppingBag size={16} />
-                      My Orders
-                    </button>
+                    {userRole === "user" && (
+                      <>
+                        <button
+                          onClick={() => null}
+                          className='flex items-center gap-2 w-fu;; px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800'
+                        >
+                          <ShoppingBag size={16} />
+                          My Orders
+                        </button>
+                      </>
+                    )}
+
                     <button
                       onClick={() => signOut()}
                       className="flex items-center gap-2 w-full px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800"
