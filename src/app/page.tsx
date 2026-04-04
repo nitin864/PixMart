@@ -6,6 +6,9 @@ import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import EditRoleMobile from '@/components/EditRoleMobile'
 import Nav from '@/components/Nav'
+import UserDashboard from '@/components/UserDashboard'
+import AdminDashboard from '@/components/AdminDashboard'
+import DeliveryBoyDashboard from '@/components/DeliveryBoyDashboard'
 
 async function Home() {
 
@@ -30,6 +33,8 @@ async function Home() {
         fontFamily: "'DM Sans', 'Segoe UI', sans-serif",
       }}>
       <Nav />
+
+      {user.role == "user" ? (<UserDashboard />) : user.role == "admin" ? (<AdminDashboard />) : <DeliveryBoyDashboard/>}
     </div>
   )
 }
