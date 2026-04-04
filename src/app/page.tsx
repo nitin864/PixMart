@@ -29,7 +29,7 @@ async function Home() {
         background: "radial-gradient(ellipse at 60% 0%, #052e16 0%, #0a0a0a 60%)",
         fontFamily: "'DM Sans', 'Segoe UI', sans-serif",
       }}>
-      <Nav user={user}/>
+      <Nav />
     </div>
   )
 }
