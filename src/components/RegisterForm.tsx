@@ -1,6 +1,11 @@
-import { ArrowLeft, EyeIcon, EyeOff, Mail, ShoppingCart, User, Lock, Check, X } from 'lucide-react'
+ 
+
+import axios from 'axios'
+import { ArrowLeft, EyeIcon, EyeOff, Mail, ShoppingCart, User, Lock, Check, X, Loader2 } from 'lucide-react'
 import { motion, AnimatePresence } from "motion/react"
-import { useState, useMemo } from 'react'
+import React, { useState, useMemo, use } from 'react'
+import { useRouter } from "next/navigation"
+
 
 type propType = {
   previosStep: (s: number) => void
@@ -20,7 +25,7 @@ const RegisterForm = ({ previosStep }: propType) => {
   const [showPassword, setShowPassword] = useState(false)
   const [focused, setFocused] = useState<string | null>(null)
   const [touched, setTouched] = useState<Record<string, boolean>>({})
-
+  const [loading, setLoading] = useState(false)
   const checks = useMemo(() => passwordChecks(password), [password])
   const passwordStrength = checks.filter(c => c.pass).length
   const strengthColor = passwordStrength <= 1 ? "#ef4444" : passwordStrength <= 2 ? "#f59e0b" : passwordStrength <= 3 ? "#3b82f6" : "#10b981"
@@ -28,10 +33,25 @@ const RegisterForm = ({ previosStep }: propType) => {
 
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   const nameValid = name.trim().length >= 2
-
+  const router = useRouter()
   const handleBlur = (field: string) => {
     setFocused(null)
     setTouched(prev => ({ ...prev, [field]: true }))
+  }
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    try {
+      const result = await axios.post("/api/auth/register", {
+        name, email, password
+      })
+      console.log(result.data)
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+    }
   }
 
   const inputFields = [
@@ -165,18 +185,16 @@ const RegisterForm = ({ previosStep }: propType) => {
               transition={{ duration: 0.4, delay: 0.2 + idx * 0.08 }}
             >
               <div
-                className={`relative flex items-center rounded-xl border transition-all duration-200 ${
-                  field.error
+                className={`relative flex items-center rounded-xl border transition-all duration-200 ${field.error
                     ? "border-red-400 bg-red-50/40"
                     : focused === field.id
-                    ? "border-green-500 bg-white shadow-md shadow-green-100"
-                    : "border-gray-200 bg-gray-50 hover:border-gray-300"
-                }`}
+                      ? "border-green-500 bg-white shadow-md shadow-green-100"
+                      : "border-gray-200 bg-gray-50 hover:border-gray-300"
+                  }`}
               >
                 <span
-                  className={`ml-3 transition-colors duration-200 ${
-                    field.error ? "text-red-400" : focused === field.id ? "text-green-500" : "text-gray-400"
-                  }`}
+                  className={`ml-3 transition-colors duration-200 ${field.error ? "text-red-400" : focused === field.id ? "text-green-500" : "text-gray-400"
+                    }`}
                 >
                   {field.icon}
                 </span>
@@ -232,18 +250,16 @@ const RegisterForm = ({ previosStep }: propType) => {
             transition={{ duration: 0.4, delay: 0.36 }}
           >
             <div
-              className={`relative flex items-center rounded-xl border transition-all duration-200 ${
-                touched.password && passwordStrength < 4
+              className={`relative flex items-center rounded-xl border transition-all duration-200 ${touched.password && passwordStrength < 4
                   ? "border-amber-400 bg-amber-50/30"
                   : focused === "password"
-                  ? "border-green-500 bg-white shadow-md shadow-green-100"
-                  : "border-gray-200 bg-gray-50 hover:border-gray-300"
-              }`}
+                    ? "border-green-500 bg-white shadow-md shadow-green-100"
+                    : "border-gray-200 bg-gray-50 hover:border-gray-300"
+                }`}
             >
               <span
-                className={`ml-3 transition-colors duration-200 ${
-                  focused === "password" ? "text-green-500" : "text-gray-400"
-                }`}
+                className={`ml-3 transition-colors duration-200 ${focused === "password" ? "text-green-500" : "text-gray-400"
+                  }`}
               >
                 <Lock className="w-5 h-5" />
               </span>
@@ -334,7 +350,10 @@ const RegisterForm = ({ previosStep }: propType) => {
             className="text-center text-sm text-gray-500 mt-1"
           >
             Already have an account?{" "}
-            <span className="text-green-600 font-semibold cursor-pointer hover:text-green-700 hover:underline underline-offset-2 transition-colors">
+            <span
+              className="text-green-600 font-semibold cursor-pointer hover:text-green-700 hover:underline underline-offset-2 transition-colors"
+              onClick={() => router.push("/login")}
+            >
               Sign in
             </span>
           </motion.p>
@@ -348,14 +367,14 @@ const RegisterForm = ({ previosStep }: propType) => {
           >
             <button
               type="button"
-              disabled={!nameValid || !emailValid || passwordStrength < 3}
-              className={`w-full py-3.5 rounded-xl font-semibold text-sm transition-all duration-300 ${
-                nameValid && emailValid && passwordStrength >= 3
+              onClick={handleRegister}
+              disabled={loading || !nameValid || !emailValid || passwordStrength < 3}
+              className={`w-full py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center transition-all duration-300 ${!loading && nameValid && emailValid && passwordStrength >= 3
                   ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-md shadow-emerald-200 hover:shadow-lg hover:shadow-emerald-300 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
-              }`}
+                }`}
             >
-              Create Account
+              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Create Account"}
             </button>
           </motion.div>
 
