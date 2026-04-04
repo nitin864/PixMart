@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   ShoppingCart,
   Search,
@@ -13,6 +13,7 @@ import {
   LogOut
 } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { signOut } from 'next-auth/react'
 
 type NavLink = {
@@ -85,7 +86,7 @@ export default function NavClient({ userName, userImage }: NavClientProps) {
         <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
 
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-green-600">
               <Leaf size={18} className="text-white" />
             </div>
@@ -93,11 +94,10 @@ export default function NavClient({ userName, userImage }: NavClientProps) {
             <span className="text-white font-bold text-lg tracking-wide">
               Pix<span className="text-green-400">Mart</span>
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-1">
-
             {links.map((link) => (
               <div key={link.label} className="relative">
 
@@ -130,13 +130,13 @@ export default function NavClient({ userName, userImage }: NavClientProps) {
                       className="absolute top-full left-0 mt-2 w-44 rounded-xl bg-zinc-900 border border-zinc-700 shadow-xl"
                     >
                       {link.sub.map((item) => (
-                        <a
+                        <Link
                           key={item}
                           href="#"
                           className="block px-4 py-2 text-sm text-zinc-400 hover:text-white hover:bg-zinc-800"
                         >
                           {item}
-                        </a>
+                        </Link>
                       ))}
                     </motion.div>
                   )}
@@ -144,7 +144,6 @@ export default function NavClient({ userName, userImage }: NavClientProps) {
 
               </div>
             ))}
-
           </div>
 
           {/* Right side */}
@@ -173,7 +172,6 @@ export default function NavClient({ userName, userImage }: NavClientProps) {
 
             {/* Cart */}
             <button className="relative p-2 text-zinc-400 hover:text-white">
-
               <ShoppingCart size={18} />
 
               <motion.span
@@ -183,7 +181,6 @@ export default function NavClient({ userName, userImage }: NavClientProps) {
               >
                 3
               </motion.span>
-
             </button>
 
             {/* Desktop profile */}
@@ -199,6 +196,7 @@ export default function NavClient({ userName, userImage }: NavClientProps) {
                     alt="avatar"
                     width={26}
                     height={26}
+                    sizes="26px"
                     className="rounded-md"
                   />
                 ) : (
@@ -253,21 +251,21 @@ export default function NavClient({ userName, userImage }: NavClientProps) {
             {links.map((link) => (
               <div key={link.label}>
 
-                <a
+                <Link
                   href="#"
                   className="block py-3 text-zinc-300 border-b border-zinc-700"
                 >
                   {link.label}
-                </a>
+                </Link>
 
                 {link.sub?.map((item) => (
-                  <a
+                  <Link
                     key={item}
                     href="#"
                     className="block pl-4 py-2 text-sm text-zinc-400"
                   >
                     {item}
-                  </a>
+                  </Link>
                 ))}
 
               </div>
