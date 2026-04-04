@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { PlusCircle, Upload } from "lucide-react";
-import Nav from "@/components/Nav";
+ 
 
 function AddGrocery() {
   return (
@@ -14,8 +14,7 @@ function AddGrocery() {
         fontFamily: "'DM Sans', 'Segoe UI', sans-serif",
       }}
     >
-      {/* Navbar */}
-      <Nav />
+      
 
       {/* Back Button */}
       <Link
