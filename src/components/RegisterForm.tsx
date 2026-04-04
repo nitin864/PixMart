@@ -5,6 +5,7 @@ import { ArrowLeft, EyeIcon, EyeOff, Mail, ShoppingCart, User, Lock, Check, X, L
 import { motion, AnimatePresence } from "motion/react"
 import React, { useState, useMemo, use } from 'react'
 import { useRouter } from "next/navigation"
+import { signIn } from 'next-auth/react'
 
 
 type propType = {
@@ -399,6 +400,7 @@ const RegisterForm = ({ previosStep }: propType) => {
             <button
               type="button"
               className="w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl border border-gray-200 bg-white text-gray-700 font-semibold text-sm hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm active:scale-[0.98] transition-all duration-200 cursor-pointer"
+              onClick={()=>signIn("google")}
             >
               {/* Google SVG Icon */}
               <svg width="20" height="20" viewBox="0 0 24 24">
