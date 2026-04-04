@@ -3,7 +3,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
 
-const Welcome = () => {
+type propType={
+  nextStep:(s:number)=>void
+}
+
+const Welcome = ({nextStep}: propType ) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { scrollYProgress } = useScroll();
   const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
@@ -236,7 +240,7 @@ const Welcome = () => {
                   whileHover={{ scale: 1.05, y: -2, shadow: '0 25px 50px -12px rgba(16, 185, 129, 0.5)' }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <span className="relative z-10 flex items-center justify-center gap-2">
+                  <span className="relative z-10 flex items-center justify-center gap-2" onClick={()=>nextStep(2)}>
                     Order Now
                     <motion.span
                       animate={{ x: [0, 5, 0] }}
